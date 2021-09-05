@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flick Shot</title>
+  </head>
+  <body>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Sawarabi+Gothic&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Sawarabi Gothic", sans-serif;
+      }
+      html {
+        cursor: none;
+        overflow-y: hidden;
+        user-select: none;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        background-color: black;
+      }
+      .loading-container {
+        width: 100%;
+        height: 100%;
+        background: #000;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .loading {
+        width: 80px;
+        height: 50px;
+        position: relative;
+      }
+      .loading p {
+        top: 0;
+        padding: 0;
+        margin: 0;
+        color: white;
+        color: #5389a6;
+        font-family: "Oxygen", sans-serif;
+        animation: text 3.5s ease both infinite;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+      @keyframes text {
+        0% {
+          letter-spacing: 1px;
+          transform: translateX(0px);
+        }
+
+        40% {
+          letter-spacing: 2px;
+          transform: translateX(26px);
+        }
+
+        80% {
+          letter-spacing: 1px;
+          transform: translateX(32px);
+        }
+
+        90% {
+          letter-spacing: 2px;
+          transform: translateX(0px);
+        }
+
+        100% {
+          letter-spacing: 1px;
+          transform: translateX(0px);
+        }
+      }
+      .loading span {
+        background-color: #5389a6;
+        border-radius: 50px;
+        display: block;
+        height: 16px;
+        width: 16px;
+        bottom: 0;
+        position: absolute;
+        transform: translateX(64px);
+        animation: loading 3.5s ease both infinite;
+      }
+      .loading span:before {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        background-color: #a6dcee;
+        border-radius: inherit;
+        animation: loading2 3.5s ease both infinite;
+      }
+
+      @keyframes loading {
+        0% {
+          width: 16px;
+          transform: translateX(0px);
+        }
+
+        40% {
+          width: 100%;
+          transform: translateX(0px);
+        }
+
+        80% {
+          width: 16px;
+          transform: translateX(64px);
+        }
+
+        90% {
+          width: 100%;
+          transform: translateX(0px);
+        }
+
+        100% {
+          width: 16px;
+          transform: translateX(0px);
+        }
+      }
+      @keyframes loading2 {
+        0% {
+          transform: translateX(0px);
+          width: 16px;
+        }
+
+        40% {
+          transform: translateX(0%);
+          width: 80%;
+        }
+
+        80% {
+          width: 100%;
+          transform: translateX(0px);
+        }
+
+        90% {
+          width: 80%;
+          transform: translateX(15px);
+        }
+        100% {
+          transform: translateX(0px);
+          width: 16px;
+        }
+      }
+      .navbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 75px;
+        color: white;
+        /* background: #fff; */
+        position: absolute;
+      }
+      .floater {
+        width: 60%;
+        height: 60%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: #090909;
+        box-shadow: 0 8px 32px 0 rgba(47, 48, 49, 0.37);
+        /* backdrop-filter: blur(7.5px); */
+        /* -webkit-backdrop-filter: blur(7.5px); */
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .floater:hover {
+        cursor: auto;
+      }
+
+      .floater svg {
+        max-width: 90px;
+        height: auto;
+      }
+
+      .floater svg:hover {
+        cursor: pointer;
+      }
+      .floater h1 {
+        font-size: 2.5rem;
+        color: aliceblue;
+        border-bottom: 4px solid rgb(34, 32, 32);
+      }
+      .floater span {
+        border-bottom: 3px solid aliceblue;
+      }
+      .floater h4 {
+        color: aliceblue;
+        font-size: 1.1rem;
+        max-width: 500px;
+        text-align: center;
+        border-bottom: 3px solid white;
+        padding: 15px;
+      }
+
+      .scoreboard {
+        width: 60%;
+        height: 60%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: #090909;
+        box-shadow: 0 8px 32px 0 rgba(47, 48, 49, 0.37);
+        /* backdrop-filter: blur(7.5px); */
+        /* -webkit-backdrop-filter: blur(7.5px); */
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+        display: none;
+      }
+      .scoreboard h1 {
+        width: fit-content;
+        text-align: center;
+        font-size: 2.5rem;
+        color: aliceblue;
+        border-bottom: 4px solid rgb(34, 32, 32);
+      }
+      .scoreboard h2 {
+        color: white;
+      }
+      .scoreboard:hover {
+        cursor: auto;
+      }
+
+      .navigate {
+        width: 60%;
+        height: max-content;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        /* border: 1px solid yellow; */
+      }
+      .svgDiv {
+        width: 120px;
+        height: 120px;
+        /* border: 1px solid red; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      svg:hover {
+        cursor: pointer;
+        opacity: 0.7;
+      }
+      svg {
+        max-width: 100px;
+        height: auto;
+      }
+      .cursor {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background-color: red;
+        border-radius: 50%;
+
+        /* transition-duration: 100ms; */
+      }
+      @keyframes playAnim {
+        0% {
+          transform: translateX(-50%);
+          opacity: 0;
+        }
+        25% {
+          transform: translateX(-40%);
+          opacity: 0.2;
+        }
+        50% {
+          transform: translateX(-30%);
+          opacity: 0.4;
+        }
+        75% {
+          transform: translateX(-20%);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateX(0%);
+          opacity: 1;
+        }
+      }
+      @keyframes retryAnim {
+        to {
+          transform: rotate(120deg);
+          transform-origin: center;
+        }
+      }
+
+      .screenError {
+        width: 350px;
+        height: 250px;
+        border-radius: 5px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        background-image: url(../static/error.jpg);
+        background-size: contain;
+        justify-content: center;
+        align-items: center;
+        display: none;
+      }
+      .screenError h2 {
+        color: rgb(158, 0, 0);
+        font-size: 1.5rem;
+        text-align: center;
+        font-family: "Sawarabi Gothic", sans-serif;
+        font-weight: bolder;
+      }
+
+      @media only screen and (max-width: 1200px) {
+        .navbar {
+          filter: blur(8px);
+        }
+        .floater {
+          filter: blur(8px);
+        }
+        .scoreboard {
+          filter: blur(8px);
+        }
+        canvas {
+          filter: blur(8px);
+        }
+
+        .screenError {
+          display: flex;
+        }
+      }
+    </style>
+    <div class="loading-container">
+      <div class="loading">
+        <p>loading</p>
+        <span></span>
+      </div>
+    </div>
+    <div class="cursor"></div>
+    <div class="navbar">
+      <h1><span class="time">60</span></h1>
+    </div>
+    <div class="floater">
+      <h1>FLICK SHOT</h1>
+      <h4>
+        <span>INSTRUCTIONS</span> <br />
+        * Shoot down targets APPEARING on console. <br />* Targets disappear
+        after 1 sec. <br />* Random spawning of targets every 1 sec. <br />
+        * 60 seconds. <br />
+        * Master your reaction time.
+      </h4>
+      <svg
+        class="start"
+        width="327"
+        height="326"
+        viewBox="0 0 327 326"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g id="playButton">
+          <g id="outPlay">
+            <path
+              id="Vector"
+              d="M309.298 136.678L52.7643 4.18176C31.9209 -6.57835 0 3.86342 0 30.4772V295.405C0 319.281 29.6617 333.67 52.7643 321.701L309.298 189.268C332.182 177.49 332.255 148.456 309.298 136.678Z"
+              fill="#DADEE2"
+            />
+          </g>
+          <g id="inPlay">
+            <path
+              id="Vector_2"
+              d="M243.143 139.507L78.3128 54.4161C64.9204 47.5058 44.4102 54.2117 44.4102 71.3035V241.444C44.4102 256.778 63.4687 266.019 78.3128 258.332L243.143 173.282C257.847 165.717 257.894 147.072 243.143 139.507Z"
+              fill="#ADB5BD"
+            />
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="scoreboard">
+      <h1>FLICK SHOT</h1>
+      <h2 class="score">score</h2>
+      <h2 class="accu">Accuracy</h2>
+      <div class="navigate">
+        <div class="svgDiv">
+          <a href="./ex3.html">
+            <svg
+              width="98"
+              height="98"
+              viewBox="0 0 98 98"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="retry">
+                <path
+                  id="Vector"
+                  d="M49.0889 0.562518C62.032 0.58576 73.7836 5.68615 82.4598 13.9776L89.4353 7.00197C92.3885 4.04904 97.4375 6.14045 97.4375 10.3166V36.5C97.4375 39.0889 95.3389 41.1875 92.75 41.1875H66.5666C62.3904 41.1875 60.299 36.1385 63.252 33.1854L71.4063 25.0311C65.3781 19.3867 57.5779 16.2602 49.291 16.1887C31.2445 16.0328 16.0326 30.6373 16.1887 49.2828C16.3367 66.9705 30.6766 81.8125 49 81.8125C57.0326 81.8125 64.6244 78.9457 70.6072 73.6961C71.5336 72.8834 72.9326 72.9328 73.8041 73.8041L81.5506 81.5506C82.5021 82.5022 82.4551 84.0535 81.4564 84.9555C72.8676 92.7135 61.4855 97.4375 49 97.4375C22.2488 97.4375 0.562695 75.7514 0.5625 49.0004C0.562305 22.2799 22.3684 0.514666 49.0889 0.562518Z"
+                  fill="#ADB5BD"
+                />
+              </g>
+            </svg>
+          </a>
+        </div>
+
+        <a href="./index.html">
+          <svg
+            width="101"
+            height="78"
+            viewBox="0 0 101 78"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="home">
+              <path
+                id="Vector"
+                d="M48.6779 20.1753L16.6693 46.5382V74.9913C16.6693 75.728 16.9619 76.4346 17.4829 76.9555C18.0038 77.4764 18.7103 77.7691 19.447 77.7691L38.9019 77.7187C39.6362 77.7151 40.3392 77.4208 40.8571 76.9003C41.375 76.3797 41.6658 75.6753 41.6658 74.941V58.3247C41.6658 57.5879 41.9584 56.8814 42.4794 56.3605C43.0003 55.8395 43.7068 55.5469 44.4435 55.5469H55.5547C56.2914 55.5469 56.9979 55.8395 57.5188 56.3605C58.0398 56.8814 58.3324 57.5879 58.3324 58.3247V74.9288C58.3313 75.2943 58.4023 75.6565 58.5414 75.9945C58.6805 76.3325 58.8849 76.6398 59.1429 76.8986C59.401 77.1575 59.7076 77.3629 60.0452 77.503C60.3828 77.6431 60.7447 77.7153 61.1102 77.7153L80.5581 77.7691C81.2948 77.7691 82.0014 77.4764 82.5223 76.9555C83.0432 76.4346 83.3359 75.728 83.3359 74.9913V46.5191L51.3342 20.1753C50.9579 19.8721 50.4893 19.7067 50.006 19.7067C49.5228 19.7067 49.0541 19.8721 48.6779 20.1753V20.1753ZM99.2387 38.0937L84.7248 26.1302V2.08333C84.7248 1.5308 84.5053 1.0009 84.1146 0.610195C83.7239 0.219494 83.194 0 82.6414 0H72.9192C72.3667 0 71.8368 0.219494 71.4461 0.610195C71.0554 1.0009 70.8359 1.5308 70.8359 2.08333V14.6892L55.2925 1.90104C53.8009 0.673575 51.9291 0.00245372 49.9974 0.00245372C48.0656 0.00245372 46.1939 0.673575 44.7022 1.90104L0.756074 38.0937C0.545115 38.2681 0.370579 38.4823 0.242441 38.7242C0.114302 38.966 0.0350708 39.2307 0.00927457 39.5032C-0.0165216 39.7757 0.0116227 40.0506 0.0920993 40.3122C0.172576 40.5738 0.303808 40.8169 0.478296 41.0278L4.90538 46.4097C5.07939 46.6213 5.29343 46.7965 5.53523 46.9253C5.77704 47.054 6.04187 47.1339 6.31456 47.1601C6.58725 47.1864 6.86245 47.1587 7.1244 47.0785C7.38635 46.9983 7.62991 46.8672 7.84114 46.6927L48.6779 13.0573C49.0541 12.754 49.5228 12.5887 50.006 12.5887C50.4893 12.5887 50.9579 12.754 51.3342 13.0573L92.1727 46.6927C92.3836 46.8672 92.6267 46.9984 92.8883 47.0789C93.1499 47.1594 93.4248 47.1875 93.6973 47.1617C93.9697 47.1359 94.2345 47.0567 94.4763 46.9286C94.7181 46.8004 94.9324 46.6259 95.1067 46.4149L99.5338 41.033C99.7081 40.8209 99.8388 40.5765 99.9183 40.3137C99.9978 40.051 100.025 39.7751 99.9972 39.502C99.9698 39.2289 99.8887 38.9639 99.7585 38.7222C99.6283 38.4805 99.4516 38.2669 99.2387 38.0937V38.0937Z"
+                fill="#ADB5BD"
+              />
+            </g>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <canvas></canvas>
+    <div class="screenError">
+      <h2>This app is not compatible on this device.</h2>
+    </div>
+    <script src="./ex3.js"></script>
+  </body>
+</html>

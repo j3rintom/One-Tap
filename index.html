@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One Tap</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="loading-container">
+      <div class="loading">
+        <p>loading</p>
+        <span></span>
+      </div>
+    </div>
+    <div class="main">
+      <div class="black"></div>
+      <div class="white"></div>
+      <div class="header">
+        <div class="logo"></div>
+        <div class="title">
+          <h1>
+            <span class="blackText">One </span
+            ><span class="whiteText"> Tap</span>
+          </h1>
+          <div class="bnwText">
+            <span class="blackText">One Stop Workshop</span
+            ><span class="whiteText">To Improve Your Aim .</span>
+          </div>
+        </div>
+      </div>
+      <div class="desc">
+        <div class="descText">
+          <h3>
+            The complete training ground to improve precision and tracking.
+            Grind through One Tap to work your rank up in any and every Tactical
+            FPS game.
+          </h3>
+        </div>
+        <div class="bot">
+          <img src="./static/bot.png" alt="" />
+        </div>
+
+        <div class="modes">
+          <h2>MODES</h2>
+          <h4>All these Excercises helps to improve your accuracy.</h4>
+          <ul>
+            <li><a href="./ex1.html">Quad Shot</a></li>
+            <li><a href="./ex2.html">Float Shot</a></li>
+            <li><a href="./ex3.html">Flick Shot</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <h4>Copyright 2021 All Rights Reserved R&R</h4>
+    </div>
+    <div class="screenError">
+      <h2>This app is not compatible on this device.</h2>
+    </div>
+    <script>
+      const loader = document.querySelector(".loading-container");
+      window.addEventListener("load", () => {
+        loader.style.display = "none";
+      });
+    </script>
+  </body>
+</html>
